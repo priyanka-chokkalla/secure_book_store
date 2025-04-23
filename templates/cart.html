@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your Cart</title>
+  <!-- PayPal SDK -->
+  <script src="https://www.paypal.com/sdk/js?client-id=AVR3ZqZLe3XzU7kYArOBZFRBQbO6yuC7saCn92_l4gCJTSZA-aQF0kAxjopj4ZpofLnPc0hDTummn7M3&currency=USD"></script>
+  
+  <!-- Internal CSS -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+
+    header {
+      background-color: #333;
+      color: white;
+      padding: 10px 0;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+    }
+
+    nav a {
+      margin: 0 15px;
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .container {
+      width: 80%;
+      margin: 20px auto;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .cart-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    .cart-table th, .cart-table td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+
+    .cart-table th {
+      background-color: #f2f2f2;
+    }
+
+    .cart-summary {
+      text-align: right;
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    .btn {
+      padding: 10px 15px;
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background-color: #c0392b;
+    }
+
+    footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      position: fixed;
+      width: 100%;
+      bottom: 0;
+    }
+  </style>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <header>
+    <h1>Your Shopping Cart</h1>
+    <nav>
+      <a href="{{ url_for('home') }}">Home</a>
+      <a href="{{ url_for('cart') }}">Cart</a>
+      {% if session.get('user_id') %}
+        <a href="{{ url_for('logout') }}">Logout</a>
+      {% endif %}
+    </nav>
+  </header>
+
+  <div class="container">
+    {% if cart_items %}
+      <table class="cart-table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Subtotal</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for cart_item, product in cart_items %}
+          <tr>
+            <td>{{ product.title }}</td>
+            <td>${{ '%.2f'|format(product.price) }}</td>
+            <td>{{ cart_item.quantity }}</td>
+            <td>${{ '%.2f'|format(product.price * cart_item.quantity) }}</td>
+            <td>
+              <form action="{{ url_for('delete_from_cart', cart_id=cart_item.id) }}" method="POST">
+                <button type="submit" class="btn">Remove</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <div class="cart-summary">
+        <h3>Total: ${{ '%.2f'|format(total) }}</h3>
+      </div>
+
+      <div id="paypal-button-container"></div>
+      <script>
+        paypal.Buttons({
+          createOrder: function(data, actions) {
+            return actions.order.create({
+              purchase_units: [{
+                amount: { value: '{{ "%.2f"|format(total) }}' }
+              }]
+            });
+          },
+          onApprove: function(data, actions) {
+            return actions.order.capture().then(function(details) {
+              window.location.href = "{{ url_for('payment_success') }}";
+            });
+          },
+          onCancel: function (data) {
+            window.location.href = "{{ url_for('payment_cancelled') }}";
+          }
+        }).render('#paypal-button-container');
+      </script>
+
+    {% else %}
+      <p>Your cart is empty.</p>
+    {% endif %}
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Secure Bookstore. All rights reserved.</p>
+  </footer>
+</body>
+</html>

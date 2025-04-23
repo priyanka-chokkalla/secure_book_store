@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>secure Bookstore</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f4f4;
+    }
+
+    header {
+      background: #333;
+      color: #fff;
+      padding: 10px 20px;
+      text-align: center;
+    }
+
+    nav a {
+      color: #fff;
+      margin: 0 10px;
+      text-decoration: none;
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    .book-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: space-between;
+    }
+
+    .book {
+      background: #fff;
+      padding: 15px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      width: 45%;
+    }
+
+    .book-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    .book-price {
+      margin: 10px 0;
+      font-size: 1rem;
+      color: #555;
+    }
+
+    .pdf-viewer iframe {
+      width: 100%;
+      height: 400px;
+      border: none;
+    }
+
+    .btn {
+      background: #28a745;
+      color: #fff;
+      padding: 8px 15px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background: #218838;
+    }
+
+    footer {
+      background: #333;
+      color: #fff;
+      text-align: center;
+      padding: 10px 0;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Secure Bookstore</h1>
+    <nav>
+      <a href="{{ url_for('index') }}">Home</a>
+      <a href="{{ url_for('cart') }}">Cart</a>
+      {% if session.get('user_id') %}
+      <a href="{{ url_for('logout') }}">Logout</a>
+      {% endif %}
+    </nav>
+    <h2>Welcome to the Secure Bookstore</h2>    
+  </header>
+  <div class="container">
+    <h2>Available Books and Tutorials</h2>
+    <div class="book-container">
+      <!-- Book 1 -->
+      <div class="book">
+        <div class="book-title"><i class="fas fa-book"></i> Book 1: Introduction to Python</div>
+        <div class="book-price">Amount: $10.00</div>
+        <div class="pdf-viewer">
+          <iframe src="{{ url_for('serve_pdf', filename='pdf1.pdf') }}" title="Book 1"></iframe>
+        </div>
+        <form action="{{ url_for('add_to_cart', product_id=1) }}" method="POST">
+          <input type="hidden" name="price" value="10.00">
+          <input type="number" name="quantity" value="1" min="1" style="width:50px;">
+          <button type="submit" class="btn">Add to Cart</button>
+        </form>
+      </div>
+
+      <!-- Book 2 -->
+      <div class="book">
+        <div class="book-title"><i class="fas fa-book"></i> Book 2: Java Programming Basics</div>
+        <div class="book-price">Amount: $12.00</div>
+        <div class="pdf-viewer">
+          <iframe src="{{ url_for('serve_pdf', filename='pdf2.pdf') }}" title="Book 2"></iframe>
+        </div>
+        <form action="{{ url_for('add_to_cart', product_id=2) }}" method="POST">
+          <input type="hidden" name="price" value="12.00">
+          <input type="number" name="quantity" value="1" min="1" style="width:50px;">
+          <button type="submit" class="btn">Add to Cart</button>
+        </form>
+      </div>
+
+      <!-- Book 3 -->
+      <div class="book">
+        <div class="book-title"><i class="fas fa-book"></i> Book 3: C++ for Beginners</div>
+        <div class="book-price">Amount: $15.00</div>
+        <div class="pdf-viewer">
+          <iframe src="{{ url_for('serve_pdf', filename='pdf3.pdf') }}" title="Book 3"></iframe>
+        </div>
+        <form action="{{ url_for('add_to_cart', product_id=3) }}" method="POST">
+          <input type="hidden" name="price" value="15.00">
+          <input type="number" name="quantity" value="1" min="1" style="width:50px;">
+          <button type="submit" class="btn">Add to Cart</button>
+        </form>
+      </div>
+
+      <!-- Book 4 -->
+      <div class="book">
+        <div class="book-title"><i class="fas fa-book"></i> Book 4: Web Development Essentials</div>
+        <div class="book-price">Amount: $20.00</div>
+        <div class="pdf-viewer">
+          <iframe src="{{ url_for('serve_pdf', filename='pdf4.pdf') }}" title="Book 4"></iframe>
+        </div>
+        <form action="{{ url_for('add_to_cart', product_id=4) }}" method="POST">
+          <input type="hidden" name="price" value="20.00">
+          <input type="number" name="quantity" value="1" min="1" style="width:50px;">
+          <button type="submit" class="btn">Add to Cart</button>
+        </form>
+      </div>
+
+      <!-- Tutorial 1 -->
+      <div class="book">
+        <div class="book-title"><i class="fas fa-book"></i> Tutorial 1: Algorithms</div>
+        <div class="book-price">Amount: $8.00</div>
+        <div class="pdf-viewer">
+          <iframe src="{{ url_for('serve_pdf', filename='tutorial1.pdf') }}" title="Tutorial 1"></iframe>
+        </div>
+        <form action="{{ url_for('add_to_cart', product_id=5) }}" method="POST">
+          <input type="hidden" name="price" value="8.00">
+          <input type="number" name="quantity" value="1" min="1" style="width:50px;">
+          <button type="submit" class="btn">Add to Cart</button>
+        </form>
+      </div>
+
+      <!-- Tutorial 2 -->
+      <div class="book">
+        <div class="book-title"><i class="fas fa-book"></i> Tutorial 2: Clean Code</div>
+        <div class="book-price">Amount: $9.00</div>
+        <div class="pdf-viewer">
+          <iframe src="{{ url_for('serve_pdf', filename='tutorial2.pdf') }}" title="Tutorial 2"></iframe>
+        </div>
+        <form action="{{ url_for('add_to_cart', product_id=6) }}" method="POST">
+          <input type="hidden" name="price" value="9.00">
+          <input type="number" name="quantity" value="1" min="1" style="width:50px;">
+          <button type="submit" class="btn">Add to Cart</button>
+        </form>
+      </div>
+
+      <!-- Tutorial 3 -->
+      <div class="book">
+        <div class="book-title"><i class="fas fa-book"></i> Tutorial 3: Design Patterns</div>
+        <div class="book-price">Amount: $11.00</div>
+        <div class="pdf-viewer">
+          <iframe src="{{ url_for('serve_pdf', filename='tutorial3.pdf') }}" title="Tutorial 3"></iframe>
+        </div>
+        <form action="{{ url_for('add_to_cart', product_id=7) }}" method="POST">
+          <input type="hidden" name="price" value="11.00">
+          <input type="number" name="quantity" value="1" min="1" style="width:50px;">
+          <button type="submit" class="btn">Add to Cart</button>
+        </form>
+      </div>
+
+      <!-- Tutorial 4 -->
+      <div class="book">
+        <div class="book-title"><i class="fas fa-book"></i> Tutorial 4: Data Structures</div>
+        <div class="book-price">Amount: $13.00</div>
+        <div class="pdf-viewer">
+          <iframe src="{{ url_for('serve_pdf', filename='tutorial4.pdf') }}" title="Tutorial 4"></iframe>
+        </div>
+        <form action="{{ url_for('add_to_cart', product_id=8) }}" method="POST">
+          <input type="hidden" name="price" value="13.00">
+          <input type="number" name="quantity" value="1" min="1" style="width:50px;">
+          <button type="submit" class="btn">Add to Cart</button>
+        </form>
+      </div>
+
+      <!-- Tutorial 5 -->
+      <div class="book">
+        <div class="book-title"><i class="fas fa-book"></i> Tutorial 5: Software Engineering</div>
+        <div class="book-price">Amount: $14.00</div>
+        <div class="pdf-viewer">
+          <iframe src="{{ url_for('serve_pdf', filename='tutorial5.pdf') }}" title="Tutorial 5"></iframe>
+        </div>
+        <form action="{{ url_for('add_to_cart', product_id=9) }}" method="POST">
+          <input type="hidden" name="price" value="14.00">
+          <input type="number" name="quantity" value="1" min="1" style="width:50px;">
+          <button type="submit" class="btn">Add to Cart</button>
+        </form>
+      </div>
+
+      <!-- Tutorial 6 -->
+      <div class="book">
+        <div class="book-title"><i class="fas fa-book"></i> Tutorial 6: Database Design</div>
+        <div class="book-price">Amount: $16.00</div>
+        <div class="pdf-viewer">
+          <iframe src="{{ url_for('serve_pdf', filename='tutorial6.pdf') }}" title="Tutorial 6"></iframe>
+        </div>
+        <form action="{{ url_for('add_to_cart', product_id=10) }}" method="POST">
+          <input type="hidden" name="price" value="16.00">
+          <input type="number" name="quantity" value="1" min="1" style="width:50px;">
+          <button type="submit" class="btn">Add to Cart</button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+  <footer>
+    <p>&copy; 2025 Secure Bookstore. All rights reserved.</p>
+  </footer>
+</body>
+
+</html>

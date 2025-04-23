@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Verify OTP - Secure Bookstore</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+    }
+
+    .container {
+      width: 400px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 10px;
+      background: #17a2b8;
+      border: none;
+      color: #fff;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background: #138496;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>OTP Verification</h2>
+    <form action="{{ url_for('verify_otp') }}" method="POST">
+      <label for="otp">Enter OTP:</label>
+      <input type="text" name="otp" maxlength="6" required>
+      <button type="submit" class="btn">Verify OTP</button>
+    </form>
+  </div>
+</body>
+
+</html>
